@@ -10,23 +10,23 @@ import { Link, useForm,} from '@inertiajs/react';
 import { Label, Transition } from '@headlessui/react';
 import Selectbox from '@/Components/Selectbox';
 
-export default function UserCreate({ auth }) {
+export default function UserEdit({ user, auth }) {
 
-    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
-        name: "",
-        email: "",
+    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+        name: user.name,
+        email: user.email,
         password: "",
         password_confirmation: "",
-        role:"user",
+        role:user.role,
     });
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('users.store'), {
+        patch(route('users.update', user.id), {
             preserveScrool: true,
             onSuccess: () => {
-                alert("User Created");
+                alert("User Updated");
             },
             onError: (errors) =>{
                 console.log(errors);
@@ -48,10 +48,10 @@ export default function UserCreate({ auth }) {
                         <div className="p-6 text-gray-900">
                             <section className="max-w-xl">
                                 <header>
-                                    <h2 className="text-lg font-medium text-gray-900">Create User</h2>
+                                    <h2 className="text-lg font-medium text-gray-900">Edit User</h2>
 
                                     <p className="mt-1 text-sm text-gray-600">
-                                        Create a new user.
+                                        Edit a new user.
                                     </p>
                                 </header>
 
@@ -99,7 +99,7 @@ export default function UserCreate({ auth }) {
                                                 setData("role", e.target.value)
                                             }
                                             id="role"
-                                            currentValue='user'
+                                            currentValue={data.role}
                                             options={[
                                                 {
                                                     value: "admin",
